@@ -6,7 +6,7 @@ import BackgroundSlideshow from "@/components/BackgroundSlideshow";
 export default function Layout() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col page-root">
       {/* Background slideshow behind all content */}
       <BackgroundSlideshow />
 
