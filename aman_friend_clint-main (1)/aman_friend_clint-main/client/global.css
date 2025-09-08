@@ -193,6 +193,16 @@
                 linear-gradient(180deg, hsl(var(--background) / 0.35) 0%, hsl(var(--background) / 0.35) 100%);
   }
 
+  /* Hero fallback: fixed image that covers the whole site */
+  .hero-bg-image {
+    @apply fixed inset-0 -z-10;
+    background-image: url('https://cdn.builder.io/api/v1/image/assets%2Ffb795d15f146487ca8108581f173dd02%2Fd4fa85a27a20432da3ce5440590e03a6?format=webp&width=1600');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.45;
+  }
+
   /* Mobile adjustments: keep faces/subjects centered and avoid cropping key areas */
   @media (max-width: 640px) {
     .split-1 { background-position: center 30%; }
