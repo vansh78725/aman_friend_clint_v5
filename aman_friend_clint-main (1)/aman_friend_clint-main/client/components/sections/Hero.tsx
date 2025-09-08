@@ -46,12 +46,8 @@ export default function Hero() {
       <div className="container relative">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            {settings.headline || "Premium Glass Loot Store"}
+            {settings.headline || "Zenzefreeitems"}
           </h1>
-          <p className="mt-4 text-white/80 text-lg">
-            {settings.subtext ||
-              "Sleek, cinematic and fast. Explore curated drops with luminous glassmorphism."}
-          </p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-8 max-w-md">
