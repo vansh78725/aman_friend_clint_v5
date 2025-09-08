@@ -373,7 +373,7 @@ export default function Admin() {
         </div>
       </section>
 
-      <div className="flex gap-3">
+      <div className="hidden sm:flex gap-3">
         <button
           className="px-4 py-2 rounded-md brand-gradient text-white shadow-glass"
           onClick={() => {
