@@ -7,7 +7,7 @@ export type Slot = {
 
 import { useState } from "react";
 
-function SlotCard({ video, selected, onSelect, disabled }: Slot & { selected: boolean; onSelect: () => void; disabled?: boolean; }) {
+function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onSelect: () => void; }) {
   const [asVideo, setAsVideo] = useState(() => {
     if (!video) return false;
     if (video.startsWith("data:video")) return true;
@@ -20,14 +20,11 @@ function SlotCard({ video, selected, onSelect, disabled }: Slot & { selected: bo
     <button
       type="button"
       onClick={onSelect}
-      disabled={disabled}
       className={cn(
         "relative glass-card rounded-xl p-2 md:p-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]",
-        disabled && "opacity-60 cursor-not-allowed"
+        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
       )}
       aria-pressed={selected}
-      aria-disabled={disabled}
     >
       <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
         {video ? (
@@ -118,18 +115,17 @@ export default function ProductGrid() {
     slots = next;
   }
 
-  const { selectedId, setSelectedId, canClaim, claim, isUidValid } = useClaim();
+  const { selectedIds, toggleSelected, canClaim, claim, isUidValid } = useClaim();
 
   const renderCard = (s: Slot) => (
     <SlotCard
       key={s.id}
       {...s}
-      selected={selectedId === s.id}
+      selected={selectedIds.includes(s.id)}
       onSelect={() => {
-        if (!isUidValid) return;
-        setSelectedId(s.video ? s.id : null);
+        if (!s.video) return;
+        toggleSelected(s.id);
       }}
-      disabled={!isUidValid}
     />
   );
 
@@ -160,7 +156,7 @@ export default function ProductGrid() {
             !canClaim && "opacity-50 cursor-not-allowed"
           )}
           aria-disabled={!canClaim}
-          title={!isUidValid ? "Enter a valid 10-digit UID" : !selectedId ? "Select a bundle" : "Claim"}
+          title={!isUidValid ? "Enter a valid 10-digit UID" : selectedIds.length === 0 ? "Select at least one bundle" : "Claim"}
         >
           Claim now
         </button>
