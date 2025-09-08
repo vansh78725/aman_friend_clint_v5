@@ -21,12 +21,12 @@ function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onS
       type="button"
       onClick={onSelect}
       className={cn(
-        "relative glass-card rounded-xl p-2 md:p-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
+        "relative glass-card rounded-xl p-2 md:p-3 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        selected && "ring-1 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
       )}
       aria-pressed={selected}
     >
-      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
+      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border-[0.5px] border-white/10 flex items-center justify-center">
         {video ? (
           asVideo ? (
             <video
