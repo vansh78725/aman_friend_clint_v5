@@ -96,9 +96,26 @@ export default function Admin() {
             visitors won’t see your edits.
           </p>
         </div>
-        <a href="/" className="px-3 py-2 rounded-md glass text-white">
-          Back to website
-        </a>
+        <div className="flex items-center gap-2">
+          <a href="/" className="px-3 py-2 rounded-md glass text-white">
+            Back to website
+          </a>
+          <button
+            className="px-3 py-2 rounded-md brand-gradient text-white shadow-glass"
+            onClick={() => {
+              save();
+              toast.success("Saved locally (visible only to you)");
+            }}
+          >
+            Save
+          </button>
+          <button
+            className="px-3 py-2 rounded-md glass text-white"
+            onClick={reset}
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       <section className="glass p-4 md:p-6 space-y-4">
