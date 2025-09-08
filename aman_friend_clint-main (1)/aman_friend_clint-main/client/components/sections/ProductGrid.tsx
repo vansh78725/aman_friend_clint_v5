@@ -82,11 +82,9 @@ export default function ProductGrid() {
   // Normalize media to fixed-length array of 11
   const normalized: (string | null)[] = Array.from({ length: totalSlots }, (_, i) => provided[i] ?? null);
 
-  // Move slot 6 (index 5) content to slot 10 (index 9), leaving slot 6 empty
-  if (normalized[5]) {
-    normalized[9] = normalized[5];
-    normalized[5] = null;
-  }
+  // Assign user-provided media to slot 6 and slot 11
+  normalized[5] = "https://cdn.builder.io/o/assets%2Ffb795d15f146487ca8108581f173dd02%2F5e9b0dec61454f6da64afb298738c678?alt=media&token=47ac2eda-37d8-4759-a7df-c92aaf1ddfff&apiKey=fb795d15f146487ca8108581f173dd02";
+  normalized[10] = "https://cdn.builder.io/o/assets%2Ffb795d15f146487ca8108581f173dd02%2F7962ddc881e7420dbdb09fc0cf53063c?alt=media&token=eea120d1-c0e1-42a8-9735-26328813fe7e&apiKey=fb795d15f146487ca8108581f173dd02";
 
   const slots: Slot[] = normalized.map((video, i) => ({
     id: String(i + 1),
