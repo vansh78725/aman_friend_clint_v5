@@ -96,7 +96,7 @@ export default function Admin() {
             visitors won’t see your edits.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           <a href="/" className="px-3 py-2 rounded-md glass text-white">
             Back to website
           </a>
