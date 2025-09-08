@@ -122,7 +122,12 @@
         900px 500px at 90% 10%,
         hsl(var(--accent) / 0.12),
         transparent 60%
-      );
+      ),
+      var(--site-bg-url);
+    background-size: auto, auto, cover;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: center, center, center;
+    background-attachment: scroll, scroll, fixed;
   }
 }
 
