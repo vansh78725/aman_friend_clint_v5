@@ -21,7 +21,7 @@ function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onS
       type="button"
       onClick={onSelect}
       className={cn(
-        "relative glass-card rounded-xl p-2 md:p-3 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        "relative glass-card rounded-xl p-1 md:p-1.5 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
         selected && "ring-1 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
       )}
       aria-pressed={selected}
@@ -35,7 +35,14 @@ function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onS
               loop
               muted
               playsInline
+              preload="auto"
               className="h-full w-full object-cover"
+              onTimeUpdate={(e) => {
+                const v = e.currentTarget;
+                if (v.duration && v.duration - v.currentTime < 0.05) {
+                  v.currentTime = 0.01;
+                }
+              }}
               onError={() => setAsVideo(false)}
             />
           ) : (
