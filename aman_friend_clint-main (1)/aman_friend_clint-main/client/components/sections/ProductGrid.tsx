@@ -7,7 +7,7 @@ export type Slot = {
 
 import { useState } from "react";
 
-function SlotCard({ video }: Slot) {
+function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onSelect: () => void; }) {
   const [asVideo, setAsVideo] = useState(() => {
     if (!video) return false;
     if (video.startsWith("data:video")) return true;
@@ -17,7 +17,15 @@ function SlotCard({ video }: Slot) {
     return true; // try video first, fallback to image on error
   });
   return (
-    <div className={cn("relative glass-card rounded-xl p-2 md:p-3")}>
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn(
+        "relative glass-card rounded-xl p-2 md:p-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
+      )}
+      aria-pressed={selected}
+    >
       <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
         {video ? (
           asVideo ? (
@@ -38,11 +46,12 @@ function SlotCard({ video }: Slot) {
           <div className="h-10 w-10 rounded-lg border border-white/20" />
         )}
       </div>
-    </div>
+    </button>
   );
 }
 
 import { useLocalSettings } from "@/hooks/useLocalSettings";
+import { useClaim } from "@/hooks/useClaim";
 
 export default function ProductGrid() {
   const { settings } = useLocalSettings();
@@ -106,34 +115,48 @@ export default function ProductGrid() {
     slots = next;
   }
 
+  const { selectedId, setSelectedId, canClaim, claim, isUidValid } = useClaim();
+
+  const renderCard = (s: Slot) => (
+    <SlotCard
+      key={s.id}
+      {...s}
+      selected={selectedId === s.id}
+      onSelect={() => setSelectedId(s.video ? s.id : null)}
+    />
+  );
+
   return (
     <section className="container -mt-10 md:-mt-12 max-w-4xl">
       {/* Row 1: exactly 3, mobile too */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(0, 3).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(0, 3).map(renderCard)}
       </div>
       {/* Row 2: 4 */}
       <div className="mt-2 sm:mt-3 md:mt-4 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(3, 7).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(3, 7).map(renderCard)}
       </div>
       {/* Row 3: 4 */}
       <div className="mt-2 sm:mt-3 md:mt-4 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(7, 11).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(7, 11).map(renderCard)}
       </div>
 
       <div className="flex justify-center mt-8 md:mt-10">
-        <a
-          href="#"
-          className="px-7 py-3 rounded-full brand-gradient text-white font-bold text-base md:text-lg shadow-glass"
+        <button
+          type="button"
+          onClick={claim}
+          disabled={!canClaim}
+          className={cn(
+            "relative inline-flex items-center px-8 py-3 rounded-full font-extrabold text-white text-base md:text-lg transition shadow-glass",
+            "brand-gradient",
+            "before:absolute before:inset-0 before:rounded-full before:blur-xl before:bg-[hsl(var(--primary)/0.55)] before:opacity-70 before:-z-10",
+            !canClaim && "opacity-50 cursor-not-allowed"
+          )}
+          aria-disabled={!canClaim}
+          title={!isUidValid ? "Enter a valid 10-digit UID" : !selectedId ? "Select a bundle" : "Claim"}
         >
           Claim now
-        </a>
+        </button>
       </div>
     </section>
   );
