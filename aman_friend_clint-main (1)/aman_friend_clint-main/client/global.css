@@ -1,0 +1,161 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    /* Premium plum brand (glass-friendly) */
+    --background: 330 25% 8%;
+    --foreground: 210 40% 98%;
+
+    --card: 330 24% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 330 24% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 335 76% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 28% 18%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 280 22% 22%;
+    --muted-foreground: 280 10% 74%;
+
+    --accent: 292 48% 44%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 300 18% 28%;
+    --input: 300 18% 28%;
+    --ring: 335 76% 58%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar (matches brand) */
+    --sidebar-background: 330 22% 9%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 335 76% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 280 22% 22%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 300 18% 28%;
+    --sidebar-ring: 335 76% 58%;
+
+    /* Extra tokens */
+    --brand: 335 76% 52%;
+    --brand-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    /* Invert to light scheme for dark class */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 335 76% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 20.2% 35.1%;
+
+    --accent: 335 76% 96%;
+    --accent-foreground: 335 76% 18%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 335 76% 44%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 335 76% 44%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 335 76% 44%;
+
+    --brand: 335 76% 44%;
+    --brand-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(
+        1200px 600px at 10% 0%,
+        hsl(var(--primary) / 0.12),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at 90% 10%,
+        hsl(var(--accent) / 0.12),
+        transparent 60%
+      );
+  }
+}
+
+@layer components {
+  .brand-gradient {
+    background-image: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 100%
+    );
+  }
+  .glass {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_10px_30px_-10px_rgba(0,0,0,0.5)] rounded-xl;
+  }
+  .glass-card {
+    @apply glass bg-white/10 hover:bg-white/20 transition-colors;
+  }
+  .glass-input {
+    @apply glass bg-white/10 focus-within:ring-2 focus-within:ring-primary/60;
+  }
+  .gradient-hero {
+    background:
+      radial-gradient(
+        1200px 800px at 50% -10%,
+        hsl(var(--primary) / 0.25),
+        transparent 60%
+      ),
+      radial-gradient(
+        1000px 700px at 80% 10%,
+        hsl(var(--accent) / 0.25),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        hsl(var(--background)) 0%,
+        hsl(var(--background)) 100%
+      );
+  }
+}
