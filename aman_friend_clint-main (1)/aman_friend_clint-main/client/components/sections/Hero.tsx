@@ -46,7 +46,7 @@ export default function Hero() {
       <div className="container relative">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            {settings.headline || "Zenzefreeitems"}
+            {settings.headline || "Premium Rewards"}
           </h1>
         </div>
 
