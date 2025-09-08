@@ -390,6 +390,27 @@ export default function Admin() {
           Reset local changes
         </button>
       </div>
+
+      {/* Mobile sticky actions */}
+      <div className="sm:hidden fixed bottom-4 inset-x-4 z-50">
+        <div className="glass rounded-xl p-2 flex gap-2">
+          <button
+            className="flex-1 px-4 py-2 rounded-lg brand-gradient text-white shadow-glass"
+            onClick={() => {
+              save();
+              toast.success("Saved locally (visible only to you)");
+            }}
+          >
+            Save
+          </button>
+          <button
+            className="flex-1 px-4 py-2 rounded-lg glass text-white"
+            onClick={reset}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
