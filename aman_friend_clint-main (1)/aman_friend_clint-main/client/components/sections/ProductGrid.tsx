@@ -78,9 +78,19 @@ export default function ProductGrid() {
 
   // Total slots: 11 (3 + 4 + 4) – last ones can be blank
   const totalSlots = 11;
-  let slots: Slot[] = Array.from({ length: totalSlots }).map((_, i) => ({
+
+  // Normalize media to fixed-length array of 11
+  const normalized: (string | null)[] = Array.from({ length: totalSlots }, (_, i) => provided[i] ?? null);
+
+  // Move slot 6 (index 5) content to slot 10 (index 9), leaving slot 6 empty
+  if (normalized[5]) {
+    normalized[9] = normalized[5];
+    normalized[5] = null;
+  }
+
+  const slots: Slot[] = normalized.map((video, i) => ({
     id: String(i + 1),
-    video: provided[i] ?? null,
+    video,
   }));
 
 
