@@ -85,8 +85,8 @@ export default function Admin() {
   };
 
   return (
-    <div className="container py-10 space-y-8">
-      <div className="flex items-center justify-between gap-4">
+    <div className="container py-10 space-y-8 pb-24">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-white">
             Admin Panel (local-only)
@@ -96,9 +96,26 @@ export default function Admin() {
             visitors won’t see your edits.
           </p>
         </div>
-        <a href="/" className="px-3 py-2 rounded-md glass text-white">
-          Back to website
-        </a>
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <a href="/" className="px-3 py-2 rounded-md glass text-white">
+            Back to website
+          </a>
+          <button
+            className="px-3 py-2 rounded-md brand-gradient text-white shadow-glass"
+            onClick={() => {
+              save();
+              toast.success("Saved locally (visible only to you)");
+            }}
+          >
+            Save
+          </button>
+          <button
+            className="px-3 py-2 rounded-md glass text-white"
+            onClick={reset}
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       <section className="glass p-4 md:p-6 space-y-4">
@@ -356,7 +373,7 @@ export default function Admin() {
         </div>
       </section>
 
-      <div className="flex gap-3">
+      <div className="hidden sm:flex gap-3">
         <button
           className="px-4 py-2 rounded-md brand-gradient text-white shadow-glass"
           onClick={() => {
@@ -372,6 +389,27 @@ export default function Admin() {
         >
           Reset local changes
         </button>
+      </div>
+
+      {/* Mobile sticky actions */}
+      <div className="sm:hidden fixed bottom-4 inset-x-4 z-50">
+        <div className="glass rounded-xl p-2 flex gap-2">
+          <button
+            className="flex-1 px-4 py-2 rounded-lg brand-gradient text-white shadow-glass"
+            onClick={() => {
+              save();
+              toast.success("Saved locally (visible only to you)");
+            }}
+          >
+            Save
+          </button>
+          <button
+            className="flex-1 px-4 py-2 rounded-lg glass text-white"
+            onClick={reset}
+          >
+            Reset
+          </button>
+        </div>
       </div>
     </div>
   );

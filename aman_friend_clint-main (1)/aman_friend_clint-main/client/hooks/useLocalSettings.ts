@@ -8,6 +8,7 @@ export type LocalSettings = {
 };
 
 const KEY = "rv_local_settings_v1";
+const KEY_SESSION = "rv_local_settings_session_v1";
 const EVT = "rv-local-settings-update";
 
 export function useLocalSettings() {
@@ -15,14 +16,17 @@ export function useLocalSettings() {
 
   useEffect(() => {
     try {
-      const mem = (window as any).__rv_local_settings_cache as
-        | LocalSettings
-        | undefined;
+      const mem = (window as any).__rv_local_settings_cache as LocalSettings | undefined;
       if (mem) {
         setSettings(mem);
       } else {
-        const raw = localStorage.getItem(KEY);
-        if (raw) setSettings(JSON.parse(raw));
+        const sess = sessionStorage.getItem(KEY_SESSION);
+        if (sess) {
+          setSettings(JSON.parse(sess));
+        } else {
+          const raw = localStorage.getItem(KEY);
+          if (raw) setSettings(JSON.parse(raw));
+        }
       }
     } catch {}
     const onStorage = (e: StorageEvent) => {
@@ -48,18 +52,22 @@ export function useLocalSettings() {
     try {
       // keep full settings in-memory (handles large data URLs)
       (window as any).__rv_local_settings_cache = settings;
-      // store a pruned version in localStorage for persistence
+      // also keep a full copy in sessionStorage for same-tab navigation
+      try {
+        sessionStorage.setItem(KEY_SESSION, JSON.stringify(settings));
+      } catch {}
+      // store a pruned version in localStorage for cross-tab persistence
       const pruned: LocalSettings = {
         ...settings,
         background:
           settings.background &&
           settings.background.startsWith("data:") &&
-          settings.background.length > 500000
+          settings.background.length > 5_000_000
             ? null
             : (settings.background ?? null),
         slotMedia:
           settings.slotMedia?.map((m) =>
-            m && m.startsWith("data:") && m.length > 250000 ? null : m,
+            m && m.startsWith("data:") && m.length > 2_000_000 ? null : m,
           ) ?? settings.slotMedia,
       };
       localStorage.setItem(KEY, JSON.stringify(pruned));
@@ -70,17 +78,20 @@ export function useLocalSettings() {
   const save = () => {
     try {
       (window as any).__rv_local_settings_cache = settings;
+      try {
+        sessionStorage.setItem(KEY_SESSION, JSON.stringify(settings));
+      } catch {}
       const pruned: LocalSettings = {
         ...settings,
         background:
           settings.background &&
           settings.background.startsWith("data:") &&
-          settings.background.length > 500000
+          settings.background.length > 5_000_000
             ? null
             : (settings.background ?? null),
         slotMedia:
           settings.slotMedia?.map((m) =>
-            m && m.startsWith("data:") && m.length > 250000 ? null : m,
+            m && m.startsWith("data:") && m.length > 2_000_000 ? null : m,
           ) ?? settings.slotMedia,
       };
       localStorage.setItem(KEY, JSON.stringify(pruned));

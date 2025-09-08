@@ -1,11 +1,15 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import BackgroundSlideshow from "@/components/BackgroundSlideshow";
 
 export default function Layout() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col page-root">
+      {/* Background slideshow behind all content */}
+      <BackgroundSlideshow />
+
       <header className="sticky top-0 z-40">
         <div className="brand-gradient backdrop-blur-xl border-b border-white/10">
           <div className="container flex h-16 items-center justify-between">

@@ -7,7 +7,7 @@ export type Slot = {
 
 import { useState } from "react";
 
-function SlotCard({ video }: Slot) {
+function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onSelect: () => void; }) {
   const [asVideo, setAsVideo] = useState(() => {
     if (!video) return false;
     if (video.startsWith("data:video")) return true;
@@ -17,8 +17,16 @@ function SlotCard({ video }: Slot) {
     return true; // try video first, fallback to image on error
   });
   return (
-    <div className={cn("relative glass-card rounded-xl p-2 md:p-3")}>
-      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn(
+        "relative glass-card rounded-xl p-1 md:p-1.5 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        selected && "ring-1 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
+      )}
+      aria-pressed={selected}
+    >
+      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border-[0.5px] border-white/10 flex items-center justify-center">
         {video ? (
           asVideo ? (
             <video
@@ -27,7 +35,14 @@ function SlotCard({ video }: Slot) {
               loop
               muted
               playsInline
+              preload="auto"
               className="h-full w-full object-cover"
+              onTimeUpdate={(e) => {
+                const v = e.currentTarget;
+                if (v.duration && v.duration - v.currentTime < 0.05) {
+                  v.currentTime = 0.01;
+                }
+              }}
               onError={() => setAsVideo(false)}
             />
           ) : (
@@ -38,11 +53,12 @@ function SlotCard({ video }: Slot) {
           <div className="h-10 w-10 rounded-lg border border-white/20" />
         )}
       </div>
-    </div>
+    </button>
   );
 }
 
 import { useLocalSettings } from "@/hooks/useLocalSettings";
+import { useClaim } from "@/hooks/useClaim.tsx";
 
 export default function ProductGrid() {
   const { settings } = useLocalSettings();
@@ -67,73 +83,52 @@ export default function ProductGrid() {
     video: provided[i] ?? null,
   }));
 
-  // Reorder row 1 as requested: [bunny, diamonds, fire]
-  // Assume current center (index 1) is bunny, index 0 is diamonds, and the last non-null is fire.
-  const lastIdx = (() => {
-    for (let i = slots.length - 1; i >= 0; i--) {
-      if (slots[i]?.video) return i;
-    }
-    return -1;
-  })();
-  if (slots[0] && slots[1]) {
-    const bunny = slots[1];
-    const diamonds = slots[0];
-    const fire = lastIdx > 1 ? slots[lastIdx] : undefined;
-    const used = new Set<number>();
-    const next: Slot[] = Array.from({ length: totalSlots }).map((_, i) => ({
-      id: String(i + 1),
-      video: null,
-    }));
-    // Set first row
-    next[0] = { ...bunny, id: "1" };
-    next[1] = { ...diamonds, id: "2" };
-    if (fire) {
-      next[2] = { ...fire, id: "3" };
-      used.add(lastIdx);
-    } else {
-      next[2] = { ...slots[2], id: "3" };
-    }
-    used.add(0);
-    used.add(1);
 
-    // Fill remaining positions with original order skipping used
-    let cursor = 3;
-    for (let i = 2; i < slots.length; i++) {
-      if (used.has(i)) continue;
-      next[cursor] = { ...slots[i], id: String(cursor + 1) };
-      cursor++;
-    }
-    slots = next;
-  }
+  const { selectedIds, toggleSelected, canClaim, claim, isUidValid } = useClaim();
+
+  const renderCard = (s: Slot) => (
+    <SlotCard
+      key={s.id}
+      {...s}
+      selected={selectedIds.includes(s.id)}
+      onSelect={() => {
+        if (!s.video) return;
+        toggleSelected(s.id);
+      }}
+    />
+  );
 
   return (
     <section className="container -mt-10 md:-mt-12 max-w-4xl">
       {/* Row 1: exactly 3, mobile too */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(0, 3).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(0, 3).map(renderCard)}
       </div>
       {/* Row 2: 4 */}
       <div className="mt-2 sm:mt-3 md:mt-4 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(3, 7).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(3, 7).map(renderCard)}
       </div>
       {/* Row 3: 4 */}
       <div className="mt-2 sm:mt-3 md:mt-4 grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-        {slots.slice(7, 11).map((s) => (
-          <SlotCard key={s.id} {...s} />
-        ))}
+        {slots.slice(7, 11).map(renderCard)}
       </div>
 
       <div className="flex justify-center mt-8 md:mt-10">
-        <a
-          href="#"
-          className="px-7 py-3 rounded-full brand-gradient text-white font-bold text-base md:text-lg shadow-glass"
+        <button
+          type="button"
+          onClick={claim}
+          disabled={!canClaim}
+          className={cn(
+            "relative inline-flex items-center px-8 py-3 rounded-full font-extrabold text-white text-base md:text-lg transition shadow-glass",
+            "brand-gradient",
+            "before:absolute before:inset-0 before:rounded-full before:blur-xl before:bg-[hsl(var(--primary)/0.55)] before:opacity-70 before:-z-10",
+            !canClaim && "opacity-50 cursor-not-allowed"
+          )}
+          aria-disabled={!canClaim}
+          title={!isUidValid ? "Enter a valid 10-digit UID" : selectedIds.length === 0 ? "Select at least one bundle" : "Claim"}
         >
           Claim now
-        </a>
+        </button>
       </div>
     </section>
   );

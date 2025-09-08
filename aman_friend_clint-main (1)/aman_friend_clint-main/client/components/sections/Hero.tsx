@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Hash } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { useLocalSettings } from "@/hooks/useLocalSettings";
+import { useClaim } from "@/hooks/useClaim.tsx";
 
 export default function Hero() {
-  const [uid, setUid] = useState("");
+  const { uid, setUid } = useClaim();
   const { settings } = useLocalSettings();
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -37,17 +38,16 @@ export default function Hero() {
           />
         ))}
       {!bg && (
-        <div className="absolute inset-0 -z-10 brand-gradient opacity-30" />
+        <>
+          <div className="hero-bg-image" />
+          <div className="absolute inset-0 -z-10 brand-gradient opacity-20" />
+        </>
       )}
       <div className="container relative">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            {settings.headline || "Premium Glass Loot Store"}
+            {settings.headline || "Premium Rewards"}
           </h1>
-          <p className="mt-4 text-white/80 text-lg">
-            {settings.subtext ||
-              "Sleek, cinematic and fast. Explore curated drops with luminous glassmorphism."}
-          </p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-8 max-w-md">
@@ -60,9 +60,7 @@ export default function Hero() {
               maxLength={10}
               pattern="\\d{10}"
               value={uid}
-              onChange={(e) =>
-                setUid(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))
-              }
+              onChange={(e) => setUid(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))}
               className="bg-transparent outline-none placeholder:text-white/50 text-white flex-1 text-sm"
             />
           </div>
