@@ -56,6 +56,9 @@
     /* Extra tokens */
     --brand: 335 76% 52%;
     --brand-foreground: 0 0% 100%;
+
+    /* Site background image url */
+    --site-bg-url: url('https://cdn.builder.io/api/v1/image/assets%2Ffb795d15f146487ca8108581f173dd02%2F86c68cf854b842e2a8ceb97152da4c33?format=webp&width=1600');
   }
 
   .dark {
