@@ -86,7 +86,7 @@ export default function Admin() {
 
   return (
     <div className="container py-10 space-y-8 pb-24">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-white">
             Admin Panel (local-only)
