@@ -37,7 +37,10 @@ export default function Hero() {
           />
         ))}
       {!bg && (
-        <div className="absolute inset-0 -z-10 brand-gradient opacity-30" />
+        <>
+          <div className="hero-bg-image" />
+          <div className="absolute inset-0 -z-10 brand-gradient opacity-20" />
+        </>
       )}
       <div className="container relative">
         <div className="max-w-3xl">
