@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import BackgroundSlideshow from "@/components/BackgroundSlideshow";
 
 export default function Layout() {
   const navigate = useNavigate();
