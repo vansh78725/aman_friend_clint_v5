@@ -21,12 +21,12 @@ function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onS
       type="button"
       onClick={onSelect}
       className={cn(
-        "relative glass-card rounded-xl p-1 md:p-1.5 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        "relative glass-card rounded-xl p-0.5 md:p-1 border-0 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
         selected && "ring-1 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
       )}
       aria-pressed={selected}
     >
-      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border-[0.5px] border-white/10 flex items-center justify-center">
+      <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border-[0.25px] border-white/10 flex items-center justify-center">
         {video ? (
           asVideo ? (
             <video
@@ -78,9 +78,18 @@ export default function ProductGrid() {
 
   // Total slots: 11 (3 + 4 + 4) – last ones can be blank
   const totalSlots = 11;
-  let slots: Slot[] = Array.from({ length: totalSlots }).map((_, i) => ({
+
+  // Normalize media to fixed-length array of 11
+  const normalized: (string | null)[] = Array.from({ length: totalSlots }, (_, i) => provided[i] ?? null);
+
+  // Assign user-provided media to slots 6, 10, and 11
+  normalized[5] = "https://cdn.builder.io/o/assets%2Ffb795d15f146487ca8108581f173dd02%2F5e9b0dec61454f6da64afb298738c678?alt=media&token=47ac2eda-37d8-4759-a7df-c92aaf1ddfff&apiKey=fb795d15f146487ca8108581f173dd02";
+  normalized[9] = "https://cdn.builder.io/o/assets%2Ffb795d15f146487ca8108581f173dd02%2F1ab1fe5d743e4150b46c493ba0634d17?alt=media&token=c9d2ae96-b28c-4bdc-badd-74da78c8c2f2&apiKey=fb795d15f146487ca8108581f173dd02";
+  normalized[10] = "https://cdn.builder.io/o/assets%2Ffb795d15f146487ca8108581f173dd02%2F7962ddc881e7420dbdb09fc0cf53063c?alt=media&token=eea120d1-c0e1-42a8-9735-26328813fe7e&apiKey=fb795d15f146487ca8108581f173dd02";
+
+  const slots: Slot[] = normalized.map((video, i) => ({
     id: String(i + 1),
-    video: provided[i] ?? null,
+    video,
   }));
 
 
