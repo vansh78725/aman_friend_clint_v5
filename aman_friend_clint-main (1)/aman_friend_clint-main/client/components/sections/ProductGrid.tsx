@@ -54,7 +54,7 @@ function SlotCard({ video, selected, onSelect, disabled }: Slot & { selected: bo
 }
 
 import { useLocalSettings } from "@/hooks/useLocalSettings";
-import { useClaim } from "@/hooks/useClaim";
+import { useClaim } from "@/hooks/useClaim.tsx";
 
 export default function ProductGrid() {
   const { settings } = useLocalSettings();
