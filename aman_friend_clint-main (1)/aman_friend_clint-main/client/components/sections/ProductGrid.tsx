@@ -7,7 +7,7 @@ export type Slot = {
 
 import { useState } from "react";
 
-function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onSelect: () => void; }) {
+function SlotCard({ video, selected, onSelect, disabled }: Slot & { selected: boolean; onSelect: () => void; disabled?: boolean; }) {
   const [asVideo, setAsVideo] = useState(() => {
     if (!video) return false;
     if (video.startsWith("data:video")) return true;
@@ -20,11 +20,14 @@ function SlotCard({ video, selected, onSelect }: Slot & { selected: boolean; onS
     <button
       type="button"
       onClick={onSelect}
+      disabled={disabled}
       className={cn(
         "relative glass-card rounded-xl p-2 md:p-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]"
+        selected && "ring-2 ring-primary/70 shadow-[0_0_30px_hsl(var(--primary)/0.5)]",
+        disabled && "opacity-60 cursor-not-allowed"
       )}
       aria-pressed={selected}
+      aria-disabled={disabled}
     >
       <div className="aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
         {video ? (
@@ -122,7 +125,11 @@ export default function ProductGrid() {
       key={s.id}
       {...s}
       selected={selectedId === s.id}
-      onSelect={() => setSelectedId(s.video ? s.id : null)}
+      onSelect={() => {
+        if (!isUidValid) return;
+        setSelectedId(s.video ? s.id : null);
+      }}
+      disabled={!isUidValid}
     />
   );
 
