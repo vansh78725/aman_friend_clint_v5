@@ -83,44 +83,6 @@ export default function ProductGrid() {
     video: provided[i] ?? null,
   }));
 
-  // Reorder row 1 as requested: [bunny, diamonds, fire]
-  // Assume current center (index 1) is bunny, index 0 is diamonds, and the last non-null is fire.
-  const lastIdx = (() => {
-    for (let i = slots.length - 1; i >= 0; i--) {
-      if (slots[i]?.video) return i;
-    }
-    return -1;
-  })();
-  if (slots[0] && slots[1]) {
-    const bunny = slots[1];
-    const diamonds = slots[0];
-    const fire = lastIdx > 1 ? slots[lastIdx] : undefined;
-    const used = new Set<number>();
-    const next: Slot[] = Array.from({ length: totalSlots }).map((_, i) => ({
-      id: String(i + 1),
-      video: null,
-    }));
-    // Set first row
-    next[0] = { ...bunny, id: "1" };
-    next[1] = { ...diamonds, id: "2" };
-    if (fire) {
-      next[2] = { ...fire, id: "3" };
-      used.add(lastIdx);
-    } else {
-      next[2] = { ...slots[2], id: "3" };
-    }
-    used.add(0);
-    used.add(1);
-
-    // Fill remaining positions with original order skipping used
-    let cursor = 3;
-    for (let i = 2; i < slots.length; i++) {
-      if (used.has(i)) continue;
-      next[cursor] = { ...slots[i], id: String(cursor + 1) };
-      cursor++;
-    }
-    slots = next;
-  }
 
   const { selectedIds, toggleSelected, canClaim, claim, isUidValid } = useClaim();
 
