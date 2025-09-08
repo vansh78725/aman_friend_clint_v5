@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Hash } from "lucide-react";
 import { FormEvent } from "react";
 import { useLocalSettings } from "@/hooks/useLocalSettings";
-import { useClaim } from "@/hooks/useClaim";
+import { useClaim } from "@/hooks/useClaim.tsx";
 
 export default function Hero() {
   const { uid, setUid } = useClaim();
