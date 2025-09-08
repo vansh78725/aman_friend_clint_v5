@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Hash } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { useLocalSettings } from "@/hooks/useLocalSettings";
+import { useClaim } from "@/hooks/useClaim";
 
 export default function Hero() {
-  const [uid, setUid] = useState("");
+  const { uid, setUid } = useClaim();
   const { settings } = useLocalSettings();
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -63,9 +64,7 @@ export default function Hero() {
               maxLength={10}
               pattern="\\d{10}"
               value={uid}
-              onChange={(e) =>
-                setUid(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))
-              }
+              onChange={(e) => setUid(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))}
               className="bg-transparent outline-none placeholder:text-white/50 text-white flex-1 text-sm"
             />
           </div>
