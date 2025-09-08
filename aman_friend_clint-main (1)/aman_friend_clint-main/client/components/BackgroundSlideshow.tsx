@@ -1,6 +1,6 @@
 export default function BackgroundSlideshow() {
   return (
-    <div className="background-slideshow -z-10">
+    <div className="background-slideshow z-0">
       <div className="background-slide slide-1" />
       <div className="background-slide slide-2" />
       <div className="background-slide slide-3" />
